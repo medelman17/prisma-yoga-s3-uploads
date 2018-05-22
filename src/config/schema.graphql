@@ -1,0 +1,24 @@
+#import { User, Media } from './src/generated/schema.graphql'
+
+type Mutation {
+    createMedia(data: MediaCreateInput!): Media
+    createUser(data: UserCreateInput!): User
+}
+
+type Query {
+    media(
+        where: MediaWhereInput
+        orderBy: MediaOrderByInput
+        skip: Int
+        after: String
+        before: String
+        first: Int
+        last: Int
+    ): [Media]
+}
+
+input MediaCreateInput {
+    filename: String!
+    localSource: String!
+    owner: String!
+}

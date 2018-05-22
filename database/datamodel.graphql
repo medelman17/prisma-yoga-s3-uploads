@@ -1,0 +1,17 @@
+type User {
+    id: ID! @unique
+    name: String!
+}
+
+type Media {
+    id: ID! @unique
+    createdAt: DateTime!
+    updatedAt: DateTime!
+    filename: String!
+    localSource: String!
+    uploadUri: String
+    bucket: String
+    key: String
+    region: String
+    owner: User
+}
