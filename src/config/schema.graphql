@@ -3,6 +3,7 @@
 type Mutation {
     createMedia(data: MediaCreateInput!): Media
     createUser(data: UserCreateInput!): User
+    deleteMedia(where: MediaWhereInput!): Media
 }
 
 type Query {

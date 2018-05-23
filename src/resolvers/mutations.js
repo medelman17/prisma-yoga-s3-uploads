@@ -17,6 +17,18 @@ const getSignedLinkFromS3 = async ({ filename, owner }) => {
   };
 };
 
+const deleteObjectFromS3 = ({Key}) => new Promise((res, rej) => {
+  s3.deleteObject({
+    Bucket,
+    Key,
+  }, (err, data) => {
+    if (err) {
+      rej(err)
+    }
+    res(data);
+  })
+});
+
 export const createMedia = async (parent, args, ctx, info) => {
   const { data } = args;
   const mediaDataWithS3Data = await getSignedLinkFromS3(data);
@@ -36,6 +48,24 @@ export const createMedia = async (parent, args, ctx, info) => {
     return error;
   }
 };
+
+export const deleteMedia = async (parent, args, ctx, info) => {
+  const { where } = args;
+  try {
+    const result = await ctx.db.mutation.deleteMedia(
+      {
+        where,
+      }, info
+    );
+    if (result && result.key) {
+      deleteObjectFromS3({Key: result.key}).catch(err => console.log(err));
+    }
+    return result;
+  } catch (err) {
+    console.log(err);
+    return error;
+  }
+}
 
 export const createUser = async (parent, args, ctx, info) => {
   const { data } = args;
